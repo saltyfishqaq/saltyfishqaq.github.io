@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>UsbEAm LAN Party自定义节点部署</title>
+      <link href="note/steam-usbeam-lan-party/"/>
+      <url>note/steam-usbeam-lan-party/</url>
+      
+        <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>和小伙伴联机进行steam联机游戏时PING值总是很高，故尝试利用手头上空闲的服务器自建节点。</p><p>操作系统版本：Ubuntu 18.04 64位</p><p>客户端使用软件：<a href="https://www.dogfight360.com/blog/1590/">UsbEAm LAN Party V1.2</a></p><h1 id="服务端部署"><a href="#服务端部署" class="headerlink" title="服务端部署"></a>服务端部署</h1><h2 id="配置安全组"><a href="#配置安全组" class="headerlink" title="配置安全组"></a>配置安全组</h2><p>在云服务器安全组开放端口<code>3074(UDP)</code>，<code>3075(TCP)</code></p><h2 id="安装unzip源和openvpn"><a href="#安装unzip源和openvpn" class="headerlink" title="安装unzip源和openvpn"></a>安装unzip源和openvpn</h2><pre class="language-none"><code class="language-none">apt install unzipapt install openvpn</code></pre><h2 id="将server-zip上传文件到服务器"><a href="#将server-zip上传文件到服务器" class="headerlink" title="将server.zip上传文件到服务器"></a>将server.zip上传文件到服务器</h2><p>到作者博客<a href="https://www.dogfight360.com/blog/1590/">UsbEAm LAN Party V1.2</a>下载教程</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210717165417.png" alt="image-20210717165410237" loading="lazy"></p><p>在作者给出的教程里附带<code>server.zip(6.86 KB)</code>,将其上传至服务器</p><h2 id="解压服务端并设置权限"><a href="#解压服务端并设置权限" class="headerlink" title="解压服务端并设置权限"></a>解压服务端并设置权限</h2><pre class="language-none"><code class="language-none">unzip -d &#x2F;etc&#x2F;openvpn&#x2F; server.zipcd &#x2F;etc&#x2F;openvpnchmod +x checkpsw.sh</code></pre><h2 id="配置密码"><a href="#配置密码" class="headerlink" title="配置密码"></a>配置密码</h2><p>账户密码在<code>psw-file</code>文件内设置<br><code>用户名 密码</code> (中间有个空格)</p><h2 id="在screen中启动服务端"><a href="#在screen中启动服务端" class="headerlink" title="在screen中启动服务端"></a>在screen中启动服务端</h2><p>安装screen</p><pre class="language-none"><code class="language-none">sudo apt-get install screen</code></pre><p>创建会话</p><pre class="language-none"><code class="language-none">screen -S steamudp</code></pre><p>在steamudp会话中开启udp配置的服务端</p><pre class="language-none"><code class="language-none">&#x2F;usr&#x2F;sbin&#x2F;openvpn --cd &#x2F;etc&#x2F;openvpn&#x2F; --config server_udp.conf</code></pre><p>在键盘上按下<code>ctrl+A+D</code>脱离会话,输入<code>screen -r steamudp</code>重新连接会话</p><p>创建steamtcp会话</p><pre class="language-none"><code class="language-none">screen -S steamtcp</code></pre><p>在steamtcp会话中开启tcp配置的服务端</p><pre class="language-none"><code class="language-none">&#x2F;usr&#x2F;sbin&#x2F;openvpn --cd &#x2F;etc&#x2F;openvpn&#x2F; --config server_tcp.conf</code></pre><p>启动成功后如下图,末尾有个Initialization Sequence Completed</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210717171433.png" alt="image-20210717171433474" loading="lazy"></p><p>可用<code>netstat -anp|grep 对应端口号</code> 端口号查看是否已成功监听,</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210717172649.png" alt="image-20210717172649910" loading="lazy"></p><p>完成后开始配置客户端</p><h1 id="客户端配置"><a href="#客户端配置" class="headerlink" title="客户端配置"></a>客户端配置</h1><p>按照作者官网<a href="https://www.dogfight360.com/blog/1590/">UsbEAm LAN Party V1.2</a>的步骤进行下载安装</p><p>用文本方式打开<code>customize.ini</code></p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210717173517.png" alt="image-20210717173517061" loading="lazy"></p><p>下面是我的配置</p><pre class="language-none"><code class="language-none">[usbeam]Server_List&#x3D;上海,北京Disable_rules&#x3D;0Broadcast_fix&#x3D;1[上海]IP&#x3D;47.101.182.54TCP_Port&#x3D;3075UDP_Port&#x3D;3074USER&#x3D;403PASS&#x3D;403[北京]IP&#x3D;152.136.232.119TCP_Port&#x3D;3075UDP_Port&#x3D;3074USER&#x3D;403PASS&#x3D;403</code></pre><p>配置文件编辑完成后保存再运行客户端!!</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210717173956.png" alt="image-20210717173956905" loading="lazy"></p><p>大功告成</p><p>注意：必须联机双方都开启这个软件才有效！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> steam </tag>
+            
+            <tag> p2p </tag>
+            
+            <tag> screen </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SRS流媒体服务器简单搭建</title>
+      <link href="note/srs-docker/"/>
+      <url>note/srs-docker/</url>
+      
+        <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>操作系统版本：Ubuntu  16.04 64位</p><p>Docker版本： 20.10.6, build 370c289</p><p>SRS版本：4.0.34</p><p>SRS介绍：</p><p>SRS定位是运营级的互联网直播服务器集群，追求更好的概念完整性和最简单实现的代码。SRS支持RTMP/WebRTC/HLS/HTTP-FLV/SRT/GB28181。</p><p>SRS提供了丰富的接入方案将RTMP流接入SRS，包括推送RTMP到SRS、拉取流到SRS。SRS还支持将接入的RTMP流进行各种变换，譬如直播流转码、转发给其他服务器、转封装成HLS、录制成FLV。</p><p>SRS包含支大规模集群如CDN业务的关键特性，譬如RTMP多级集群、VHOST虚拟服务器 、无中断服务Reload。此外，SRS还提供丰富的应用接口，包括HTTP回调、HTTP API接口、RTMP测速。</p><p>SRS在源站和CDN集群中都得到了广泛的应用Applications。</p><p>SRS官方文档：<a href="https://github.com/ossrs/srs/wiki">Home · ossrs/srs Wiki (github.com)</a></p><h1 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h1><ul><li>略去安装docker和Ubuntu内容</li><li>在云服务器安全组开放端口1935、1985、8080、5060、9000</li><li>使用docker安装并启动srs</li></ul><pre class="language-none"><code class="language-none">docker run -p 1935:1935 -p 1985:1985 -p 8080:8080 \--name srs \registry.cn-hangzhou.aliyuncs.com&#x2F;ossrs&#x2F;srs:v4.0.34</code></pre><p>控制台地址：<code>http://服务器IP地址:8080</code></p><ul><li>拷贝配置文件</li></ul><p>复制容器中的配置文件</p><pre class="language-none"><code class="language-none">docker cp -a srs:&#x2F;usr&#x2F;local&#x2F;srs&#x2F;conf &#x2F;root&#x2F;srs4</code></pre><p>  复制容器中的日志文件</p><pre class="language-none"><code class="language-none">docker cp -a srs:&#x2F;usr&#x2F;local&#x2F;srs&#x2F;objs &#x2F;root&#x2F;srs4</code></pre><ul><li>删除srs容器</li></ul><pre class="language-none"><code class="language-none">docker rm -f srs</code></pre><ul><li>挂载配置文件并启动</li></ul><pre class="language-none"><code class="language-none">docker run -p 1935:1935 -p 1985:1985 -p 8080:8080 \-p 5060:5060&#x2F;udp -p 9000:9000&#x2F;udp \--name srs \-v &#x2F;root&#x2F;srs4&#x2F;conf&#x2F;:&#x2F;usr&#x2F;local&#x2F;srs4&#x2F;conf&#x2F; \-v &#x2F;root&#x2F;srs4&#x2F;objs&#x2F;:&#x2F;usr&#x2F;local&#x2F;srs4&#x2F;objs&#x2F; \registry.cn-hangzhou.aliyuncs.com&#x2F;ossrs&#x2F;srs:v4.0.34</code></pre><ul><li>推流</li></ul><p>利用obs推流</p><p>推流地址：<code>rtmp://服务器IP地址:1935/live</code></p><p>串流密钥：<code>livestream</code></p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210512101425.png" alt="image-20210512101418381" style="zoom: 67%;" / loading="lazy"><p>播放：potplayer播放器、vlc播放器</p><p>如下图所示，推流端和播放端两者时延相差约为6秒，时延较小</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210512102239.png" alt="image-20210512102238975" style="zoom: 50%;" / loading="lazy"><h1 id="后续目标"><a href="#后续目标" class="headerlink" title="后续目标"></a>后续目标</h1><ul><li><p>配置好gb28181配置文件，利用购买的摄像头作为推流端，手机或电脑作为播放端，实现监控。</p></li><li><p>部署RTMP分发集群</p></li><li><p>编写前端与SRS服务器对接</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> docker </tag>
+            
+            <tag> SRS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Typora+PicGo+Gitee实现博客快速写作</title>
+      <link href="note/Typora-PicGo-Gitee-blog/"/>
+      <url>note/Typora-PicGo-Gitee-blog/</url>
+      
+        <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在写博客时，一张出色的图片能使文章增色不少，但是将其上传至github上就可能会遇到无法正常显示图片的问题，解决此问题的方案之一就是使用图床，将Typora中的本地图片全部上传到图床，向博客复制的时候复制的不再是本地地址，而是图片网址。我采用的方案是<code>Typora+PicGo+Gitee</code>。</p><ul><li><code>Typora</code> Markdown编辑器</li><li><code>Picgo</code> 图床管理工具</li><li><code>Gitee</code> 码云，代码托管仓库(本次作为图片仓库使用)，并且图片大小不能超过1M</li></ul><p>这三样工具都能够替换成其他的同类工具，像Gitee能替换成Github等，这里不做过多介绍。</p><h1 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h1><h2 id="安装Typora"><a href="#安装Typora" class="headerlink" title="安装Typora"></a>安装Typora</h2><p>[下载|Typora](<a href="https://www.typora.io/">Typora — a markdown editor, markdown reader.</a>) 选择对应版本，一步步进行安装。</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210509104648.png" style="zoom: 33%;" / loading="lazy"><h2 id="安装Picgo"><a href="#安装Picgo" class="headerlink" title="安装Picgo"></a>安装Picgo</h2><p>[下载|Picgo](<a href="https://github.com/Molunerfinn/PicGo/releases">Releases · Molunerfinn/PicGo (github.com)</a>) 选择对应版本，一步步进行安装。</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510074214.png" alt="image-20210510074213934" style="zoom: 67%;" / loading="lazy"><h2 id="配置Gitee-图床"><a href="#配置Gitee-图床" class="headerlink" title="配置Gitee(图床)"></a>配置Gitee(图床)</h2><p>登录Gitee创建一个新仓库</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510074728.png" alt="image-20210510074728311" style="zoom:50%;" / loading="lazy"><p>创建一个开源仓库<del>不能放奇怪的图片了</del>，选择readme模板，以建立单分支模型，单击创建。</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510075433.png" alt="image-20210510075433138" style="zoom: 67%;" / loading="lazy"><p>右上角头像-设置</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510080036.png" alt="image-20210510080036534" loading="lazy"></p><p>找到私人令牌，点击生成新令牌</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510080333.png" alt="image-20210510080333460" style="zoom: 50%;" / loading="lazy"><p>权限选择project，点击提交</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510080527.png" alt="image-20210510080527676" style="zoom: 67%;" / loading="lazy"><p>将私人令牌复制下来，等会要用到</p><h2 id="配置Picgo"><a href="#配置Picgo" class="headerlink" title="配置Picgo"></a>配置Picgo</h2><p>打开Picgo-插件设置，搜素<code>gitee</code>,安装<code>gitee-uploader</code>,若弹出需要node.js就下载后一步步安装后再次安装即可，若未弹出就可直接安装</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510081354.png" alt="image-20210510081354004" style="zoom: 67%;" / loading="lazy"><p>重启Picgo-图床设置-gitee</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510081640.png" alt="image-20210510081639959" style="zoom: 67%;" / loading="lazy"><p>repo填写gitee上的仓库地址</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510081828.png" alt="image-20210510081828127" style="zoom:67%;" / loading="lazy"><p>token填写之前生成的私人令牌</p><p>picgo设置里我开启了时间戳重命名，并且选择只显示gitee图床，可自行修改。</p><h2 id="配置Typora"><a href="#配置Typora" class="headerlink" title="配置Typora"></a>配置Typora</h2><p>打开Typora-文件-偏好设置</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510082849.png" alt="image-20210510082849755" style="zoom: 67%;" / loading="lazy"><p>选择图像，配置如下图所示，完成后可点击<code>验证图片上传选项</code>，验证成功，大功告成。</p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210510083028.png" alt="image-20210510083028597" style="zoom:67%;" / loading="lazy"><h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>工欲善其事，必先利其器，解决了工具的问题后，开始愉快地写作吧~</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Typora </tag>
+            
+            <tag> PicGo </tag>
+            
+            <tag> Gitee </tag>
+            
+            <tag> blog </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使用云服务器+docker搭建Minecraft服务器</title>
+      <link href="note/minecraft-bedrock-sever-docker/"/>
+      <url>note/minecraft-bedrock-sever-docker/</url>
+      
+        <content type="html"><![CDATA[<h1 id="闲话"><a href="#闲话" class="headerlink" title="闲话"></a>闲话</h1><p>最近从阿里云那白嫖的学生机到期了，想要按原来的配置续费结果发现价格贵得离谱，但是还是想继续开服和小伙伴玩耍，所以就打算这次从头到尾梳理一遍，为了以后遭遇类似情况以最快速度应对。</p><h1 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h1><h2 id="云服务器配置"><a href="#云服务器配置" class="headerlink" title="云服务器配置"></a>云服务器配置</h2><p><strong>购买云服务器</strong></p><p><a href="https://www.aliyun.com/1111/new?source=5176.11533457&userCode=xkzi973g">阿里云购买链接</a>  <a href="https://curl.qcloud.com/crtBgkRU">腾讯云购买链接</a> (吃我邀请码优惠)</p><p>这里我选择阿里云，配置如下</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210302141034.png" alt="image-20210302141027630" loading="lazy"></p><p><strong>配置安全组</strong></p><p>点击 本实例安全组-配置规则-添加安全组规则 在入方向添加两条端口范围为”19132“授权对象为“0.0.0.0/0”的规则（一条为TCP，一条为UDP），如下图</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210302151158.png" alt="image-20210302151157987" loading="lazy"></p><h2 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h2><p><strong>检查更新</strong></p><p>在控制台输入以下命令</p><pre class="language-none"><code class="language-none">sudo apt-get update</code></pre><p><strong>使用官方安装脚本自动安装docker</strong></p><pre class="language-none"><code class="language-none">curl -fsSL https:&#x2F;&#x2F;get.docker.com | bash -s docker --mirror Aliyun</code></pre><p><strong>配置docker镜像加速</strong></p><p>由于docker镜像在国外，配置下docker镜像加速器会使下载速度大大提升</p><p>阿里云镜像获取地址：<a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a></p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210302144158.png" alt="image-20210302144158662" loading="lazy"></p><h2 id="安装minecraft-bedrock-sever官方基岩版服务器"><a href="#安装minecraft-bedrock-sever官方基岩版服务器" class="headerlink" title="安装minecraft-bedrock-sever官方基岩版服务器"></a>安装minecraft-bedrock-sever官方基岩版服务器</h2><p><a href="https://hub.docker.com/r/itzg/minecraft-bedrock-server">minecraft-bedrock-server docker镜像网址</a></p><p>下载并运行mcbds docker镜像</p><pre class="language-none"><code class="language-none">docker run -d -it -e EULA&#x3D;TRUE -p 19132:19132&#x2F;udp --name mcbds itzg&#x2F;minecraft-bedrock-server</code></pre><p>等待一会就下载完成并开始运行了</p><p>在控制台输入命令<code>docker ps -a</code> 就可以看见的运行状态了，如下图</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210302145652.png" alt="image-20210302145652163" loading="lazy"></p><p>好了，目标已经完成了一大部分，此时就可以打开 minecraft-服务器-添加服务器，输入对应的服务器地址和端口就行了，成功进入后是一个崭新的地图</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210302151816.png" alt="image-20210302151816425" loading="lazy"></p><p><strong>可能用到的代码</strong></p><p>重启mcbds容器</p><pre class="language-none"><code class="language-none">docker restart mcbds</code></pre><p>停止运行mcbds容器</p><pre class="language-none"><code class="language-none">docker stop mcbdsdocker rm $(docker ps -aq)</code></pre><p>进入mcbds容器</p><pre class="language-none"><code class="language-none">docker exec -it mcbds &#x2F;bin&#x2F;bash</code></pre><p>获取mcbds的容器日志</p><pre class="language-none"><code class="language-none">docker logs -f mcbds</code></pre><h2 id="地图备份、导入与相关设置"><a href="#地图备份、导入与相关设置" class="headerlink" title="地图备份、导入与相关设置"></a>地图备份、导入与相关设置</h2><p><strong>手动备份</strong></p><p>先创建一个文件夹名为mc放备份文件</p><pre class="language-none"><code class="language-none">docker cp mcbds:&#x2F;data&#x2F;server.properties &#x2F;root&#x2F;mcdocker cp mcbds:&#x2F;data&#x2F;worlds &#x2F;root&#x2F;mc</code></pre><p><strong>手动导入</strong></p><pre class="language-none"><code class="language-none">docker cp &#x2F;root&#x2F;mc&#x2F;worlds mcbds:&#x2F;datadocker cp &#x2F;root&#x2F;mc&#x2F;server.properties mcbds:&#x2F;data</code></pre><p><strong>开启坐标显示</strong></p><pre class="language-none"><code class="language-none">gamerule showCoordinates true</code></pre><p><strong>server.properties文件注释汉化</strong></p><blockquote><p>server-name=Dedicated<br>Server<br># 用作服务端名称<br># 允许值 : 任何字符串</p><p>gamemode=survival<br># 为新玩家设置游戏模式。<br># 允许值 : “survival”(生存), “creative”(创造), 或 “adventure”(冒险)</p><p>difficulty=hard<br># 设定世界的难度。<br># 允许值 : “peaceful”(和平), “easy”(简单), “normal”(普通), 或 “hard”(困难)</p><p>allow-cheats=false<br># 如果设置为”true”，则可以使用类似命令的作弊手段。<br># 允许值 : “true”(是) 或 “false”(否)</p><p>max-players=10<br># 服务端上可以同时在线的最大玩家数。<br># 允许值 : 任意正整数</p><p>online-mode=false<br># 如果设置为”true”，则必须对所有连接的玩家进行Xbox Live身份验证。<br># 无论此设置如何，连接到远程（非本地）服务端的客户端将始终需要Xbox Live身份验证。<br># 如果服务端接受来自互联网的连接，则强烈建议启用联机模式。<br># 允许值 : “true”(是) 或 “false”(否)</p><p>white-list=false<br># 如果为”true”，则必须在”whitelist.json”文件中列出所有连接的玩家。<br># 允许值 : “true”(是) 或 “false”(否)</p><p>server-port=19132<br># 服务端应监听哪个IPv4端口。<br># 允许值 : 1-65535闭区间内的整数 [1, 65535]</p><p>server-portv6=19133<br># 服务端应监听哪个IPv6端口。<br># 允许值 : 1-65535闭区间内的整数 [1, 65535]</p><p>view-distance=32<br># 允许的最大视距（以方块数为单位）。<br># 允许值 : 任意正整数</p><p>tick-distance=4<br># 停止加载区块的距离<br># 允许值 : 4-12闭区间内的整数 [4, 12]</p><p>player-idle-timeout=30<br># 挂机玩家被踢出的时间<br># 允许值 : 任意非负整数</p><p>max-threads=8<br># 服务端使用的最大线程数，如果设置为0，服务端会尽可能多地使用所有线程。<br># 允许值 : 任意非负整数</p><p>level-name=Bedrock_level<br># 世界名称以及文件夹名<br># 允许值 : 任何字符串</p><p>level-seed=<br># 为世界定义一个种子<br># 允许值 : 任何字符串</p><p>default-player-permission-level=member<br># 新玩家的游戏模式<br># 允许值 : “visitor”(游客), “member”(会员), “operator”(管理员)</p><p>texturepack-required=true<br># 强制客户端加载服务端资源包<br># 允许值 : “true”(是) 或 “false”(否)</p><p>content-log-file-enabled=false<br># 启用将会使错误内容记录到日志文件中<br># 允许值 : “true”(是) 或 “false”(否)</p><p>compression-threshold=1<br># 要压缩的原始网络有效负载的最小大小<br># 允许值 : 0-65535</p><p>server-authoritative-movement=true<br># 启用服务端权威性移动。 如果为”true”，则服务端将在以下位置重设本地用户输入<br># 客户端的位置与服务端的位置不匹配时，发送服务端更正位置并向下发送至客户端更正。<br># 仅当正确的玩家移动设置为true时，才会进行更正。</p><p>player-movement-score-threshold=20<br># 报告异常行为之前所需的数据不一致的数量。<br># 在 server-authoritative-movement 选项为”false”时失效</p><p>player-movement-distance-threshold=0.3<br># 在检测到异常行为之前，服务端与客户端数值之差。<br># 在 server-authoritative-movement 选项为”false”时失效</p><p>player-movement-duration-threshold-in-ms=500<br># 服务端和客户端位置的时间长度可能不同步 (在 server-authoritative-movement 选项为”false”时失效)<br># 在异常移动计数增加之前。 此值以毫秒为单位定义。<br># 在 server-authoritative-movement 选项为”false”时失效</p><p>correct-player-movement=false<br># 如果为”true”，则移动值超过阈值，客户端的玩家位置将被校正为服务端玩家的位置。<br># 允许值 : “true”(是) 或 “false”(否)</p></blockquote><p>导入地图后记得将server.properties里的level-name改成对应导入的世界名称</p><h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>如果是想长期当mc服主的，最好好好利用新人优惠一开始就买较长时间的，我自己就买了一个月，后面看续费账单发现价格天差地别，不如一开始就买三年的。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 教程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> minecraft </tag>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>利用Hexo+github搭建免费的个人博客</title>
+      <link href="note/hexo-github-blog/"/>
+      <url>note/hexo-github-blog/</url>
+      
+        <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>个人博客，一言以蔽之，就是网络日记。现在应该算是过了个人博客最火爆的那个年代了，但是随着计算机的发展，拥有一个属于自己的个人博客将会成为一件稀松平常的事。如今的个人博客更为偏向于非盈利性质的，大部分博客是技术博客，记录与分享自己的学习过程，还有生活感悟、读书笔记之类的应该也有。于我而言，博客大概就是一个乱七八糟的收藏夹吧，用于更为快速地回顾以前看过的东西，顺便作为一个电子墓碑吧。</p><p>搭建博客可以使用第三方平台，也可以自建，依托于第三方平台可以较为快速地开始写作，不用再烦心搭建的问题，但是有些敏感内容就无法发布了，自建的话就挺麻烦的了，但自由度就大大提升了。这次介绍的是Github Page + Hexo来搭建个人博客。</p><h2 id="Github-Page"><a href="#Github-Page" class="headerlink" title="Github Page"></a>Github Page</h2><blockquote><p><strong>为什么要用 GitHub Page？</strong><br>对于平民玩家来说，在初次尝试建立自己的网站时，也许并不会有闲钱或者说决心来购买自己的服务器与域名。<br>而 GitHub 则提供了 <a href="https://pages.github.com/">GitHub Pages</a> 这一服务。<br>用户们可以利用这一服务，部署自己的静态站点。</p></blockquote><h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><ul><li>GitHub: <a href="https://github.com/hexojs/hexo">https://github.com/hexojs/hexo</a></li><li><a href="https://hexo.io/zh-cn/docs/index.html">官方文档</a>（直接左转详细的官方文档也不错）</li></ul><blockquote><p><strong>为嘛使用 Hexo ？</strong><br>Hexo 是一个快速、简洁而强大的博客框架，基于 Node.js，同样托管于 GitHub 之上。生态中拥有众多插件主题。你可以基于它快速生成一些静态页面。<br>你可以使用别人的各种主题与插件，也可以自己定制开发想要的功能。</p></blockquote><h1 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h1><h2 id="安装-Node-js"><a href="#安装-Node-js" class="headerlink" title="安装 Node.js"></a>安装 Node.js</h2><p><a href="https://nodejs.org/en/">下载|Node.js</a></p><p>建议下载LTS版，全部默认下一步进行安装。</p><p>Windows打开命令提示符，输入<code>node --version</code>,如果得到的版本号与你方才安装的一致，那么 Node.js 就已经成功安装。</p><p>之后要用到Node.js中的npm，由于国内使用npm可能会有点慢，建议切换为<strong>淘宝镜像源</strong></p><pre class="language-yaml" data-language="yaml"><code class="language-yaml">npm config set registry https<span class="token punctuation">:</span>//registry.npm.taobao.org</code></pre><p>检测是否成功</p><pre class="language-none"><code class="language-none">npm config get registry</code></pre><p>还原npm仓库地址，只需再把地址配置成npm镜像就可以了</p><pre class="language-none"><code class="language-none">npm config set registry https:&#x2F;&#x2F;registry.npmjs.org&#x2F;</code></pre><h2 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h2><p>下载<a href="https://git-scm.com/">Git</a>并安装（如果国内速度太慢，可以试试<a href="https://pc.qq.com/detail/13/detail_22693.html">这里</a>）</p><p>一路下一步就行</p><p>Windows打开命令提示符，输入<code>git --version</code>,如果得到的版本号与你方才安装的一致，那么 git 就已经成功安装。</p><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>打开cmd，输入命令</p><pre class="language-none"><code class="language-none">npm install -g hexo-cli</code></pre><h2 id="搭建个人博客"><a href="#搭建个人博客" class="headerlink" title="搭建个人博客"></a>搭建个人博客</h2><ul><li><p>找个空的文件夹，或者新建一个文件夹，命名为blog（或者其他名字）</p></li><li><p>进入blog文件夹、然后鼠标右键，选择Git Bash Here</p></li><li><p>初始化博客，使用命令</p></li></ul><pre class="language-none"><code class="language-none">hexo init</code></pre><ul><li>等待hexo初始化完成，这个过程可能会比较慢，因为需要从国外的网站上下载很多东西。当你看到下图红色方框中的提示信息，就代表初始化完成了。</li></ul><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210101092708.bmp" loading="lazy"></p><ul><li><p>启动博客</p><p>输入命令</p></li></ul><pre class="language-none"><code class="language-none">hexo s</code></pre><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210101093411.png" alt="image-20210101093411738" loading="lazy"></p><ul><li>打开浏览器，在地址栏输入 <a href="http://localhost:4000/">http://localhost:4000</a> 就能访问到搭建好的本地博客啦！</li></ul><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210101093931.png" alt="image-20210101093930789" loading="lazy"></p><ul><li>关闭博客，按<code>Ctrl + C </code>中断服务器运行。至此已经成功使用hexo部署了本地博客，以后可以利用这个方式来进行博客预览。</li></ul><h2 id="部署到github"><a href="#部署到github" class="headerlink" title="部署到github"></a>部署到github</h2><ul><li>创建github仓库</li></ul><p>登录你的GitHub账号，新建仓库</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210101100700.png" alt="image-20210101100700178" loading="lazy"></p><ul><li>修改项目根目录下的<code>_config.yml </code>配置文件配置参数。</li></ul><pre class="language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">deploy</span><span class="token punctuation">:</span>  <span class="token key atrule">type</span><span class="token punctuation">:</span> git  <span class="token key atrule">repo</span><span class="token punctuation">:</span> 你此前新建的仓库的链接 <span class="token comment"># 比如：https://github.com/saltyfishqaq/saltyfishqaq.github.io.git</span>  <span class="token key atrule">branch</span><span class="token punctuation">:</span> main <span class="token comment"># 默认使用 main 分支</span>  <span class="token key atrule">message</span><span class="token punctuation">:</span> Update Hexo Static Content <span class="token comment"># 你可以自定义此次部署更新的说明</span></code></pre><ul><li>安装<code>hexo-deployer-git</code>插件</li></ul><p>右键，选择Git Bash Here<br>    <img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210102102149.png" alt="image-20210102102134285" loading="lazy"><br>输入命令</p><pre class="language-none"><code class="language-none">npm install hexo-deployer-git</code></pre><p>最后执行以下命令就可以部署上传啦，以下 g 是 generate 缩写，d 是 deploy 缩写：</p><pre class="language-none"><code class="language-none">hexo g -d # 第一次输入可能需要你输入用户名和密码</code></pre><p>稍等一会，在浏览器访问网址： <a href="https://你的用户名.github.io/">https://你的用户名.github.io</a> 就会看到你的博客啦！！</p><h2 id="网站备份与Github-Action实现自动部署"><a href="#网站备份与Github-Action实现自动部署" class="headerlink" title="网站备份与Github Action实现自动部署"></a>网站备份与Github Action实现自动部署</h2><p>当前我们当前只是将生成的静态文件部署到了云端。为了以防万一，我们应该将网站的源代码文件也推送到 GitHub 仓库备份。</p><p>我选择的方案是建立两个GitHub仓库，分别叫<code>blog</code>（私有的）和<code>你的GitHub用户名.github.io</code>（共有的）。前者用来存储博客源文件，后者用于挂载GitHub Pages，发布文章后利用Github Action实现自动部署。</p><blockquote><p><strong>Github Action是什么？</strong></p><p>Github Action是Github的持续集成服务，持续集成由很多操作组成，比如抓取代码、运行测试、登录远程服务器，发布到第三方服务等等。GitHub 把这些操作就称为 actions。</p><p>很多操作在不同项目里面是类似的，完全可以共享。GitHub 注意到了这一点，想出了一个很妙的点子，允许开发者把每个操作写成独立的脚本文件，存放到代码仓库，使得其他开发者可以引用。</p><p>如果你需要某个 action，不必自己写复杂的脚本，直接引用他人写好的 action 即可，整个持续集成过程，就变成了一个 actions 的组合。这就是 GitHub Actions 最特别的地方。</p><p>GitHub 做了一个<a href="https://github.com/marketplace?type=actions">官方市场</a>，可以搜索到他人提交的 actions。另外，还有一个 <a href="https://github.com/sdras/awesome-actions">awesome actions</a> 的仓库，也可以找到不少 action。</p><p>可以看看<a href="http://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html">阮一峰的网络日志</a></p></blockquote><ul><li>在github新建一个仓库，专门用来存放博客源码</li></ul><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210105102407.png" alt="image-20210105102400331" loading="lazy"></p><blockquote><p>在本地初始化git仓库 </p><pre class="language-none"><code class="language-none">git init</code></pre><p>关联远程仓库 </p><pre class="language-none"><code class="language-none">git remote add origin git@github.com:&lt;你的用户名&gt;&#x2F;&lt;存放源文件的仓库名&gt;.git# git remote remove origin # 取消本地目录下关联的远程库</code></pre><p>备份到git仓库(每次备份都要输入)</p><pre class="language-none"><code class="language-none"># 添加到缓存区git add -Agit commit -m &quot;这次做了什么更改，简单描述下即可&quot;# 推送至远程仓库git push -u origin master</code></pre><p>每次推送都要输入这三条命令，你可能觉得有些麻烦。那么你可以编写 bash 脚本。譬如，在根目录下新建 <code>update.sh</code>。</p><pre class="language-none"><code class="language-none"># 如果没有消息后缀，默认提交信息为 &#96;:pencil: update content&#96;info&#x3D;$1if [&quot;$info&quot; &#x3D; &quot;&quot;];then info&#x3D;&quot;:pencil: update content&quot;figit add -Agit commit -m &quot;$info&quot;git push origin master </code></pre><p>此后更新的话，只需要在终端执行 <code>sh update.sh</code> 即可。</p></blockquote><p><strong>注意：如theme文件夹中主题文件中有<code>.git文件</code>，请将其删除在上传</strong></p><ul><li>添加私钥和公钥</li></ul><p>先生成一个SSH密钥</p><pre class="language-none"><code class="language-none">ssh-keygen -t rsa</code></pre><p>在<code>C:\Users\用户名\.ssh</code>中可找到</p><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210105103858.png" loading="lazy"></p><p>将<strong>公钥</strong>添加到存放网页目录的 GitHub 账号「Settings - SSH and GPG keys」内；将<strong>私钥</strong>添加到你博客源码仓库的「Settings - Secret」内，注意，私钥的名称要填<code>HEXO_DEPLOY_PRIVATE_KEY</code></p><ul><li>添加Github Action</li></ul><p><img src="https://gitee.com/daydayupwzm/imagehosting/raw/master/20210105104225.png" alt="image-20210105104225287" loading="lazy"></p><p>将下面的代码替换掉原来的代码</p><pre class="language-none"><code class="language-none"># workflow namename: Hexo Blog CI# master branch on push, auto runon:   push:    branches:      - master      jobs:  build:     runs-on: ubuntu-latest             steps:    # check it to your workflow can access it    # from: https:&#x2F;&#x2F;github.com&#x2F;actions&#x2F;checkout    - name: Checkout Repository master branch      uses: actions&#x2F;checkout@master           # from: https:&#x2F;&#x2F;github.com&#x2F;actions&#x2F;setup-node      - name: Setup Node.js 12.x       uses: actions&#x2F;setup-node@master      with:        node-version: &quot;12.x&quot;        - name: Setup Hexo Dependencies      run: |        npm install hexo-cli -g        npm install        - name: Setup Deploy Private Key      env:        HEXO_DEPLOY_PRIVATE_KEY: $&#123;&#123; secrets.HEXO_DEPLOY_PRIVATE_KEY &#125;&#125;      run: |        mkdir -p ~&#x2F;.ssh&#x2F;        echo &quot;$HEXO_DEPLOY_PRIVATE_KEY&quot; &gt; ~&#x2F;.ssh&#x2F;id_rsa         chmod 600 ~&#x2F;.ssh&#x2F;id_rsa        ssh-keyscan github.com &gt;&gt; ~&#x2F;.ssh&#x2F;known_hosts            - name: Setup Git Infomation      run: |         git config --global user.name &#39;&lt;你的用户名&gt;&#39;         git config --global user.email &#39;&lt;你登录的email&gt;&#39;    - name: Deploy Hexo       run: |        hexo clean        hexo generate         hexo deploy</code></pre><p><strong>仔细看这段代码，里边要填上你的用户名和邮箱</strong></p><p>DONE!大功告成啦，到这里可以去测试一下，修改修改某个文章标题，看看是否有效果</p><p>好了，利用GitHub action实现自动部署这一步已经完成了</p><ul><li>开始写作</li></ul><p>输入命令</p><pre class="language-none"><code class="language-none">hexo new &#39;文章标题&#39;</code></pre><p>执行完成后可以在 /source/_posts 下看到一个“文章标题.md”的文章文件,你可能需要看看<a href="https://github.com/younghz/Markdown">Markdown 基本语法</a>，好了，开始你的写作吧!~</p><h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><blockquote><p><strong>每次修改了博客都需要</strong></p><p>备份源文件等到git仓库（使用git命令推送到hexo分支）<br><code>sh update.sh</code></p><p><strong>每次在新的终端上写博客都要做的事</strong><br>如果没有依赖环境，请先安装nodejs，hexo等依赖环境，如果有，别忘了先同步修改到本地，否则极有可能产生冲突，同步命令<br><code>git pull</code></p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> 笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+            <tag> github </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="tutorial/hello-world/"/>
+      <url>tutorial/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><p><code>$ hexo new &quot;My New Post&quot;</code></p><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><p><code>$ hexo server</code></p><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><p><code>$ hexo generate</code></p><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="language-none"><code class="language-none">hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 官方教程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
